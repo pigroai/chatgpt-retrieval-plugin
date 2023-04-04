@@ -166,6 +166,15 @@ Follow these steps to quickly set up and run the ChatGPT Retrieval Plugin:
    export PG_USER=<postgres_user>
    export PG_PASSWORD=<postgres_password>
    export PG_DATABASE=<postgres_database>
+
+   # Pigro 
+   export PIGRO_CONVERTER_HOST=<endpoint_for_pigro_converter>
+   export PIGRO_SPLITTER_HOST=<endpoint_for_pigro_splitter>
+   export PIGRO_EMBEDDER_HOST=<endpoint_for_pigro_embedder>
+   export PIGRO_API_HOST=<endpoint_for_pigro_api>
+   export PIGRO_Key=<your_pigro_services_access_key>
+   export PIGRO_LANGUAGE=<main_language_for_your_data>
+   
    ```
 
 10. Run the API locally: `poetry run start`
@@ -277,6 +286,7 @@ poetry install
 
 The API requires the following environment variables to work:
 
+<<<<<<< HEAD
 | Name             | Required | Description                                                                                                                                                                                                                                  |
 | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DATASTORE`      | Yes      | This specifies the vector database provider you want to use to store and query embeddings. You can choose from `chroma`, `pinecone`, `weaviate`, `zilliz`, `milvus`, `qdrant`, `redis`, `azuresearch`, `supabase`, `postgres`, `analyticdb`. |
@@ -291,6 +301,13 @@ In addition to the `OPENAI_API_BASE` (your specific URL) and `OPENAI_API_TYPE` (
 
 If you wish to use the data preparation scripts, you will also need to set `OPENAI_METADATA_EXTRACTIONMODEL_DEPLOYMENTID`, used for metadata extraction and
 `OPENAI_COMPLETIONMODEL_DEPLOYMENTID`, used for PII handling.
+=======
+| Name             | Required | Description                                                                                                                                                                                |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `DATASTORE`      | Yes      | This specifies the vector database provider you want to use to store and query embeddings. You can choose from `pinecone`, `weaviate`, `zilliz`, `milvus`, `qdrant`, `redis` or using our datastore `pigro`.           |
+| `BEARER_TOKEN`   | Yes      | This is a secret token that you need to authenticate your requests to the API. You can generate one using any tool or method you prefer, such as [jwt.io](https://jwt.io/).                |
+| `OPENAI_API_KEY` | Yes      | This is your OpenAI API key that you need to generate embeddings using the `text-embedding-ada-002` model. You can get an API key by creating an account on [OpenAI](https://openai.com/). |
+>>>>>>> 5d650c6 (Add Pigro services as a datastore and some helper functions to allow the plugin uses pigro services.)
 
 ### Choosing a Vector Database
 

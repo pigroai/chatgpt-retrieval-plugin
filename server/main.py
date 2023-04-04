@@ -1,3 +1,4 @@
+from models.models import DocumentMetadata, Source
 import os
 from typing import Optional
 import uvicorn
@@ -15,9 +16,13 @@ from models.api import (
     UpsertResponse,
 )
 from datastore.factory import get_datastore
-from services.file import get_document_from_file
 
-from models.models import DocumentMetadata, Source
+datastore = os.environ.get("DATASTORE")
+if datastore == "pigro":
+    from services.pigro_file import get_document_from_file
+else:
+    from services.file import get_document_from_file
+
 
 bearer_scheme = HTTPBearer()
 BEARER_TOKEN = os.environ.get("BEARER_TOKEN")
