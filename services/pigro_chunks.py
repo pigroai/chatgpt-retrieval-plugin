@@ -16,13 +16,12 @@ PIGRO_LANGUAGE = os.environ.get("PIGRO_LANGUAGE", None)
 EMBEDDINGS_BATCH_SIZE = 128
 
 
-def get_text_chunks(text: str, chunk_token_size: Optional[int]) -> List[str]:
+def get_text_chunks(text: str) -> List[str]:
     """
     Split a text into chunks of ~CHUNK_SIZE tokens, based on punctuation and newline boundaries.
 
     Args:
         text: The text to split into chunks.
-        chunk_token_size: The target size of each chunk in tokens, or None to use the default CHUNK_SIZE.
 
     Returns:
         A list of text chunks, each of which is a string of ~CHUNK_SIZE tokens.
@@ -61,15 +60,12 @@ def get_text_chunks(text: str, chunk_token_size: Optional[int]) -> List[str]:
     return chunks
 
 
-def create_document_chunks(
-    doc: Document, chunk_token_size: Optional[int]
-) -> Tuple[List[DocumentChunk], str]:
+def create_document_chunks(doc: Document) -> Tuple[List[DocumentChunk], str]:
     """
     Create a list of document chunks from a document object and return the document id.
 
     Args:
         doc: The document object to create chunks from. It should have a text attribute and optionally an id and a metadata attribute.
-        chunk_token_size: The target size of each chunk in tokens, or None to use the default CHUNK_SIZE.
 
     Returns:
         A tuple of (doc_chunks, doc_id), where doc_chunks is a list of document chunks, each of which is a DocumentChunk object with an id, a document_id, a text, and a metadata attribute,
@@ -83,7 +79,7 @@ def create_document_chunks(
     doc_id = doc.id or str(uuid.uuid4())
 
     # Split the document text into chunks
-    text_chunks = get_text_chunks(doc.text, chunk_token_size)
+    text_chunks = get_text_chunks(doc.text)
 
     metadata = (
         DocumentChunkMetadata(**doc.metadata.__dict__)

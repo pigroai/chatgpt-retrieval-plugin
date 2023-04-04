@@ -28,9 +28,9 @@ class PigroDataStore(DataStore):
         self, documents: List[Document], chunk_token_size: Optional[int] = None
     ) -> List[str]:
         """
-        Takes in a list of documents and inserts them into the database.
-        First deletes all the existing vectors with the document id (if necessary, depends on the vector db), then inserts the new ones.
-        Return a list of document ids.
+        Takes in a list of documents and inserts them into Pigro's Api.
+        First deletes all the existing chunks inside pigro system with the document id, then inserts the new ones.
+        Return a list of chunks ids.
         """
         # Delete any existing vectors for documents with the input document ids
         await asyncio.gather(
@@ -46,13 +46,13 @@ class PigroDataStore(DataStore):
             ]
         )
 
-        chunks = get_pigro_document_chunks(documents, chunk_token_size)
+        chunks = get_pigro_document_chunks(documents)
         return await self._upsert(chunks)
 
     async def _upsert(self, chunks: Dict[str, List[DocumentChunk]]) -> List[str]:
         """
         Takes in a list of list of document chunks and inserts them into the database.
-        Return a list of document ids.
+        Return a list of chunks ids.
         """
         data = []
         chunks_id = []
@@ -88,7 +88,7 @@ class PigroDataStore(DataStore):
 
     async def _query(self, queries: List[QueryWithEmbedding]) -> List[QueryResult]:
         """
-        Takes in a list of queries with embeddings and filters and returns a list of query results with matching document chunks and scores.
+        Takes in a list of queries with embeddings and filters and returns a list of query results with matching document chunks and scores using pigro's hybrid search api.
         """
         results: List[QueryResult] = []
         for query in queries:
@@ -120,7 +120,7 @@ class PigroDataStore(DataStore):
         delete_all: Optional[bool] = None,
     ) -> bool:
         """
-        Removes vectors by ids, filter, or everything in the datastore.
+        Removes chunks by ids, filter, or everything in Pigro's Api.
         Multiple parameters can be used at once.
         Returns whether the operation was successful.
         """

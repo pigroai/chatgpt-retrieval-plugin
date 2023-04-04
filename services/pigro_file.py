@@ -37,7 +37,7 @@ def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) ->
             raise Exception("Unsupported file type")
 
     try:
-        # call our converter and set the returned data inside the response itself...
+        # call pigro's converter and set the returned data inside the response itself...
         files = {
             'file': (open(filepath, 'rb'), mimetype)
         }
