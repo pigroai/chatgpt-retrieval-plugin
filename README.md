@@ -66,7 +66,7 @@ This README provides detailed information on how to set up, develop, and deploy 
     - [Supabase](#supabase)
     - [Postgres](#postgres)
     - [AnalyticDB](#analyticdb)
-    - [Pigro](#pgiro)
+    - [Pigro](#pigro)
   - [Running the API Locally](#running-the-api-locally)
   - [Testing a Localhost Plugin in ChatGPT](#testing-a-localhost-plugin-in-chatgpt)
   - [Personalization](#personalization)
