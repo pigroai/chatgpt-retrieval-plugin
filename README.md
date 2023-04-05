@@ -187,9 +187,6 @@ Follow these steps to quickly set up and run the ChatGPT Retrieval Plugin:
    export PG_DATABASE=<postgres_database>
 
    # Pigro 
-   export PIGRO_CONVERTER_HOST=<endpoint_for_pigro_converter>
-   export PIGRO_SPLITTER_HOST=<endpoint_for_pigro_splitter>
-   export PIGRO_EMBEDDER_HOST=<endpoint_for_pigro_embedder>
    export PIGRO_API_HOST=<endpoint_for_pigro_api>
    export PIGRO_KEY=<your_pigro_services_access_key>
    export PIGRO_LANGUAGE=<main_language_for_your_data>
