@@ -9,7 +9,7 @@ from fastapi import UploadFile
 
 from models.models import Document, DocumentMetadata
 
-PIGRO_CONVERTER_HOST = os.environ.get("PIGRO_CONVERTER_HOST", None)
+PIGRO_CONVERTER_HOST = os.environ.get("PIGRO_HOST", None) + "/converter"
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 
 

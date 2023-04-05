@@ -19,7 +19,7 @@ from models.models import (
 from services.pigro_chunks import get_pigro_document_chunks
 from services.pigro_embedder import get_pigro_embeddings
 
-PIGRO_API_HOST = os.environ.get("PIGRO_API_HOST", None)
+PIGRO_API_HOST = os.environ.get("PIGRO_HOST", None)
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 
 

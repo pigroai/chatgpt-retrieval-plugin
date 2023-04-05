@@ -6,7 +6,7 @@ from typing import List
 
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 
-PIGRO_EMBEDDER_HOST = os.environ.get("PIGRO_SPLITTER_HOST", None)
+PIGRO_EMBEDDER_HOST = os.environ.get("PIGRO_HOST", None) + "/embedder"
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 PIGRO_LANGUAGE = os.environ.get("PIGRO_LANGUAGE", None)
 

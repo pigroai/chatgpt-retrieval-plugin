@@ -10,7 +10,7 @@ from models.models import Document, DocumentChunk, DocumentChunkMetadata
 from services.pigro_embedder import get_pigro_embeddings
 
 # Global variables
-PIGRO_SPLITTER_HOST = os.environ.get("PIGRO_SPLITTER_HOST", None)
+PIGRO_SPLITTER_HOST = os.environ.get("PIGRO_HOST", None) + "/chunks"
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 PIGRO_LANGUAGE = os.environ.get("PIGRO_LANGUAGE", None)
 EMBEDDINGS_BATCH_SIZE = 128
