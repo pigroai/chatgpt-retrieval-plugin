@@ -15,6 +15,11 @@ Pigro.ai provides AI-based text chunking services that split the content as a hu
 
 Our API natively supports Office-like documents, PDF, HTML, and plain text in many languages. We expand each content with generative AI: we generate all the questions that are answered within the document. We then combine keyword and semantic search, considering the title, the body, and the generated questions.
 
+### The edits in a nutshell
+- [Native importer for documents](/services/pigro_file.py)
+- [Advanced text chunking](/services/pigro_chunks.py)
+- [Hybrid search and generative document indexing](/datastore/providers/pigro_datastore.py)
+
 ---
 
 ## Introduction
