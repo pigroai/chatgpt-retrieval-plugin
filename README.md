@@ -1,8 +1,21 @@
-# ChatGPT Retrieval Plugin
+# ChatGPT Retrieval Plugin by [Pigro.ai](https://openai.pigro.ai)
 
-> **Join the [ChatGPT plugins waitlist here](https://openai.com/waitlist/plugins)!**
+> **WARNING: this is a fork of the original [openai repository](https://github.com/openai/chatgpt-retrieval-plugin)**
 
-Find an example video of a Retrieval Plugin that has access to the UN Annual Reports from 2018 to 2022 [here](https://cdn.openai.com/chat-plugins/retrieval-gh-repo-readme/Retrieval-Final.mp4).
+### Why
+Pigro.ai provides services that are not well served today by the standard plugin and third parties.
+
+### Who
+For developers and teams that want to provide their ChatGPT retrieval plugin best-in-class accuracy.
+
+### What
+Pigro.ai provides AI-based text chunking services that split the content as a human would do taking into account: 
+- the look and structure of the document, such as pagination, headings, tables, lists, images, etc. 
+- the semantics of the text, keeping together related sentences and splitting where is needed
+
+Our API natively supports Office-like documents, PDF, HTML, and plain text in many languages. We expand each content with generative AI: we generate all the questions that are answered within the document. We then combine keyword and semantic search, considering the title, the body, and the generated questions.
+
+---
 
 ## Introduction
 
@@ -48,6 +61,7 @@ This README provides detailed information on how to set up, develop, and deploy 
     - [Supabase](#supabase)
     - [Postgres](#postgres)
     - [AnalyticDB](#analyticdb)
+    - [Pigro](#pgiro)
   - [Running the API Locally](#running-the-api-locally)
   - [Testing a Localhost Plugin in ChatGPT](#testing-a-localhost-plugin-in-chatgpt)
   - [Personalization](#personalization)
@@ -286,7 +300,6 @@ poetry install
 
 The API requires the following environment variables to work:
 
-<<<<<<< HEAD
 | Name             | Required | Description                                                                                                                                                                                                                                  |
 | ---------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `DATASTORE`      | Yes      | This specifies the vector database provider you want to use to store and query embeddings. You can choose from `chroma`, `pinecone`, `weaviate`, `zilliz`, `milvus`, `qdrant`, `redis`, `azuresearch`, `supabase`, `postgres`, `analyticdb`. |
@@ -301,13 +314,12 @@ In addition to the `OPENAI_API_BASE` (your specific URL) and `OPENAI_API_TYPE` (
 
 If you wish to use the data preparation scripts, you will also need to set `OPENAI_METADATA_EXTRACTIONMODEL_DEPLOYMENTID`, used for metadata extraction and
 `OPENAI_COMPLETIONMODEL_DEPLOYMENTID`, used for PII handling.
-=======
+
 | Name             | Required | Description                                                                                                                                                                                |
 | ---------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `DATASTORE`      | Yes      | This specifies the vector database provider you want to use to store and query embeddings. You can choose from `pinecone`, `weaviate`, `zilliz`, `milvus`, `qdrant`, `redis` or using our datastore `pigro`.           |
 | `BEARER_TOKEN`   | Yes      | This is a secret token that you need to authenticate your requests to the API. You can generate one using any tool or method you prefer, such as [jwt.io](https://jwt.io/).                |
 | `OPENAI_API_KEY` | Yes      | This is your OpenAI API key that you need to generate embeddings using the `text-embedding-ada-002` model. You can get an API key by creating an account on [OpenAI](https://openai.com/). |
->>>>>>> 5d650c6 (Add Pigro services as a datastore and some helper functions to allow the plugin uses pigro services.)
 
 ### Choosing a Vector Database
 
@@ -368,6 +380,10 @@ For detailed setup instructions, refer to [`/docs/providers/llama/setup.md`](/do
 #### AnalyticDB
 
 [AnalyticDB](https://www.alibabacloud.com/help/en/analyticdb-for-postgresql/latest/product-introduction-overview) is a distributed cloud-native vector database designed for storing documents and vector embeddings. It is fully compatible with PostgreSQL syntax and managed by Alibaba Cloud. AnalyticDB offers a powerful vector compute engine, processing billions of data vectors and providing features such as indexing algorithms, structured and unstructured data capabilities, real-time updates, distance metrics, scalar filtering, and time travel searches. For detailed setup instructions, refer to [`/docs/providers/analyticdb/setup.md`](/docs/providers/analyticdb/setup.md).
+
+#### Pigro
+
+[Pigro](https://openai.pigro.ai) is a managed API solution for AI enterprise search. It offers a wide range of features, including native support for Office-like files and PDFs, advanced text chunking based on semantics and document structure, document expansion techniques based on generative AI, hybrid search, and multi-language. Pigro has been built from scratch to provide clear-cut answers, the precise portion of a document that answers the user's query. This type of output is exactly what ChatGPT expects. For detailed setup instructions, refer to [`/docs/providers/pigro/setup.md`](/docs/providers/pigro/setup.md).
 
 ### Running the API locally
 
