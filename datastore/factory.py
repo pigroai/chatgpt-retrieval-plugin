@@ -59,7 +59,7 @@ async def get_datastore() -> DataStore:
         case "pigro":
             from datastore.providers.pigro_datastore import PigroDataStore
 
-            return await PigroDataStore()
+            return PigroDataStore()
         case _:
             raise ValueError(
                 f"Unsupported vector database: {datastore}. "

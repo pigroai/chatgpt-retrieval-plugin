@@ -24,6 +24,22 @@ PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 
 
 class PigroDataStore(DataStore):
+
+    def __init__(self, *args, **kwargs):
+        headers = {
+            "x-api-key": PIGRO_KEY,
+            'Content-Type': 'application/json'
+        }
+        r = requests.get(
+            PIGRO_API_HOST+"check_connection",
+            headers=headers
+        )
+
+        if r.status_code != 200:
+            raise Exception("Connection Error with Pigro's API server.")
+
+        super(DataStore, self).__init__(*args, **kwargs)
+
     async def upsert(
         self, documents: List[Document], chunk_token_size: Optional[int] = None
     ) -> List[str]:
