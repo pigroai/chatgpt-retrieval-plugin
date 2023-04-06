@@ -66,8 +66,9 @@ class PigroDataStore(DataStore):
         data = {
             "documents": data
         }
-        if self._call_pigro_api(data, "add_documents"):
-            self._call_pigro_api({"webhook": ""}, "train")
+        # call pigro api, and pass the data for it to be added/updated, and if it returns true, we should call train to start training phase.
+        if self._post_pigro_api(data, "add_documents"):
+            self._post_pigro_api({}, "train")
             return chunks_id
 
         return []
@@ -81,7 +82,7 @@ class PigroDataStore(DataStore):
         query_embeddings = get_pigro_embeddings(query_texts)
         # hydrate the queries with embeddings
         queries_with_embeddings = [
-            QueryWithEmbedding(**query.dict(), embedding=embedding)
+            QueryWithEmbedding(**query.dict(), embedding=embedding, top_k=-1)
             for query, embedding in zip(queries, query_embeddings)
         ]
         return await self._query(queries_with_embeddings)
@@ -93,21 +94,19 @@ class PigroDataStore(DataStore):
         results: List[QueryResult] = []
         for query in queries:
             question = query.query
-            append = "search?k=-1&query"+urllib.parse.quote(question)
+            append = "search?k="+query.top_k + \
+                "&query"+urllib.parse.quote(question)
             pigro_result = self._get_pigro_api(append)
             query_results = []
             if pigro_result != None and pigro_result != False:
-                for chunk_id, score in pigro_result:
-                    append = "get_paragraph_info?id="+chunk_id
-                    chunk_info = self._get_pigro_api(append)
-                    if chunk_info != None and chunk_info != False:
-                        result = DocumentChunkWithScore(
-                            id=chunk_id,
-                            score=score,
-                            text=chunk_info["body"],
-                            metadata=chunk_info["metadata"]
-                        )
-                        query_results.append(result)
+                for chunk_info in pigro_result:
+                    result = DocumentChunkWithScore(
+                        id=chunk_info['id'],
+                        score=chunk_info['score'],
+                        text=chunk_info['body'],
+                        metadata=chunk_info["metadata"]
+                    )
+                    query_results.append(result)
 
             results.append(QueryResult(
                 query=query.query, results=query_results))
@@ -126,7 +125,7 @@ class PigroDataStore(DataStore):
         """
         if delete_all:
             data = []
-            return self._call_pigro_api([], "delete_all")
+            return self._post_pigro_api([], "delete_all")
 
         if filter:
             ids = []
@@ -137,15 +136,15 @@ class PigroDataStore(DataStore):
             data = {
                 "has_doc_id": ids
             }
-            return self._call_pigro_api(data, "delete_with_filter")
+            return self._post_pigro_api(data, "delete_with_filter")
 
         if ids:
             data = {
                 "ids": ids
             }
-            return self._call_pigro_api(data, "delete")
+            return self._post_pigro_api(data, "delete")
 
-    async def _call_pigro_api(self, data, method):
+    async def _post_pigro_api(self, data, method):
         headers = {
             "x-api-key": PIGRO_KEY,
             'Content-Type': 'application/json'
@@ -169,14 +168,14 @@ class PigroDataStore(DataStore):
             raise e
         return False
 
-    async def _get_pigro_api(self, append):
+    async def _get_pigro_api(self, query):
         headers = {
             "x-api-key": PIGRO_KEY,
             'Content-Type': 'application/json'
         }
         try:
             r = requests.get(
-                PIGRO_API_HOST+append,
+                PIGRO_API_HOST+query,
                 headers=headers
             )
 
