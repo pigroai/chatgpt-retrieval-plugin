@@ -18,10 +18,10 @@ EMBEDDINGS_BATCH_SIZE = 128
 
 def get_text_chunks(text: str) -> List[str]:
     """
-    Split a text into chunks of ~CHUNK_SIZE tokens, based on punctuation and newline boundaries.
+    Split a text into chunks of by providing AI-based text chunking services that split the content as a human would do taking into account.
 
     Args:
-        text: The text to split into chunks.
+        text: The html text to split into chunks.
 
     Returns:
         A list of text chunks, each of which is a string of ~CHUNK_SIZE tokens.
@@ -32,7 +32,7 @@ def get_text_chunks(text: str) -> List[str]:
 
     chunks = []
     values = {
-        'text': text,
+        'text': text,  # text is here a html text.
         'language': PIGRO_LANGUAGE
     }
     headers = {
@@ -65,7 +65,7 @@ def create_document_chunks(doc: Document) -> Tuple[List[DocumentChunk], str]:
     Create a list of document chunks from a document object and return the document id.
 
     Args:
-        doc: The document object to create chunks from. It should have a text attribute and optionally an id and a metadata attribute.
+        doc: The document object to create chunks from. It should have a text attribute containing the html text data of the document and optionally an id and a metadata attribute.
 
     Returns:
         A tuple of (doc_chunks, doc_id), where doc_chunks is a list of document chunks, each of which is a DocumentChunk object with an id, a document_id, a text, and a metadata attribute,
@@ -97,7 +97,7 @@ def create_document_chunks(doc: Document) -> Tuple[List[DocumentChunk], str]:
         chunk_id = f"{doc_id}_{i}"
         doc_chunk = DocumentChunk(
             id=chunk_id,
-            text=text_chunk,
+            text=text_chunk,  # text_chunk also a part of the html text of the document
             metadata=metadata,
         )
         # Append the chunk object to the list of chunks for this document
@@ -107,19 +107,16 @@ def create_document_chunks(doc: Document) -> Tuple[List[DocumentChunk], str]:
     return doc_chunks, doc_id
 
 
-def get_pigro_document_chunks(
-    documents: List[Document], chunk_token_size: Optional[int]
-) -> Dict[str, List[DocumentChunk]]:
+def get_pigro_document_chunks(documents: List[Document]) -> Dict[str, List[DocumentChunk]]:
     """
-    Convert a list of documents into a dictionary from document id to list of document chunks.
+    Convert a list of documents into a dictionary from document id with list of document chunks.
 
     Args:
         documents: The list of documents to convert.
-        chunk_token_size: The target size of each chunk in tokens, or None to use the default CHUNK_SIZE.
 
     Returns:
         A dictionary mapping each document id to a list of document chunks, each of which is a DocumentChunk object
-        with text, metadata, and embedding attributes.
+        with html text in text parameter, metadata, and embedding attributes.
     """
     # Initialize an empty dictionary of lists of chunks
     chunks: Dict[str, List[DocumentChunk]] = {}
@@ -129,7 +126,7 @@ def get_pigro_document_chunks(
 
     # Loop over each document and create chunks
     for doc in documents:
-        doc_chunks, doc_id = create_document_chunks(doc, chunk_token_size)
+        doc_chunks, doc_id = create_document_chunks(doc)
 
         # Append the chunks for this document to the list of all chunks
         all_chunks.extend(doc_chunks)
@@ -141,7 +138,7 @@ def get_pigro_document_chunks(
     if not all_chunks:
         return {}
 
-    # Get all the embeddings for the document chunks in batches, using get_embeddings
+    # Get all the embeddings for the document chunks in batches, using get_pigro_embeddings
     embeddings: List[List[float]] = []
     for i in range(0, len(all_chunks), EMBEDDINGS_BATCH_SIZE):
         # Get the text of the chunks in the current batch
