@@ -41,11 +41,6 @@ def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) ->
         files = {
             'file': (open(filepath, 'rb'), mimetype)
         }
-        values = {
-            'webhook': '',
-            'update_resources_url': False,
-            'direct_output': True
-        }
         headers = {
             "x-api-key": PIGRO_KEY
         }
@@ -53,8 +48,7 @@ def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) ->
         r = requests.post(
             PIGRO_CONVERTER_HOST,
             headers=headers,
-            files=files,
-            data=values
+            files=files
         )
 
         if r.status_code == 200:
@@ -75,13 +69,12 @@ async def extract_text_from_form_file(file: UploadFile):
     """Return the text content of a file."""
     # get the file body from the upload file object
     mimetype = file.content_type
-    print(f"mimetype: {mimetype}")
-    print(f"file.file: {file.file}")
-    print("file: ", file)
+    # print(f"mimetype: {mimetype}")
+    # print(f"file.file: {file.file}")
+    # print("file: ", file)
     ext = os.path.splitext(file.filename.strip())[1]
 
-    tmp_name = hashlib.md5(
-        (str(time.time()) + file.filename.strip()).encode()).hexdigest()
+    tmp_name = hashlib.md5((str(time.time()) + file.filename.strip()).encode()).hexdigest()
 
     file_stream = await file.read()
 
