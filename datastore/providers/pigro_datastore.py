@@ -77,7 +77,10 @@ class PigroDataStore(DataStore):
                 chunks_id.append(chunk.id)
                 data.append({
                     "id": chunk.id,
-                    "body": chunk.text
+                    "body": chunk.text,
+                    "meta_data": {
+                        "document_id": chunk.metadata.document_id
+                    }
                 })
         data = {
             "documents": data
