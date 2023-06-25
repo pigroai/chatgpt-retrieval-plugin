@@ -17,7 +17,6 @@ from models.models import (
     QueryWithEmbedding,
 )
 from services.pigro_chunks import get_pigro_document_chunks
-from services.pigro_embedder import get_pigro_embeddings
 
 PIGRO_API_HOST = os.environ.get("PIGRO_HOST", None)
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
@@ -97,8 +96,7 @@ class PigroDataStore(DataStore):
         Takes in a list of queries and filters and returns a list of query results with matching document chunks and scores.
         """
         # get a list of of just the queries from the Query list
-        query_texts = [query.query for query in queries]
-        query_embeddings = get_pigro_embeddings(query_texts)
+        query_embeddings = []
         # hydrate the queries with embeddings
         queries_with_embeddings = [
             QueryWithEmbedding(**query.dict(), embedding=embedding, top_k=-1)
