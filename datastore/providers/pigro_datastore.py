@@ -29,7 +29,8 @@ class PigroDataStore(DataStore):
             "x-api-key": PIGRO_KEY,
             'Content-Type': 'application/json'
         }
-        r = requests.get(
+
+        r = requests.post(
             PIGRO_API_HOST+"check_connection",
             headers=headers
         )

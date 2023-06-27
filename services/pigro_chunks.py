@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Tuple
 from models.models import Document, DocumentChunk, DocumentChunkMetadata
 
 
-from services.pigro_embedder import get_pigro_embeddings
+# from services.pigro_embedder import get_pigro_embeddings
 
 # Global variables
 PIGRO_SPLITTER_HOST = os.environ.get("PIGRO_HOST", None) + "/chunks"
@@ -142,12 +142,11 @@ def get_pigro_document_chunks(documents: List[Document]) -> Dict[str, List[Docum
     embeddings: List[List[float]] = []
     for i in range(0, len(all_chunks), EMBEDDINGS_BATCH_SIZE):
         # Get the text of the chunks in the current batch
-        batch_texts = [
-            chunk.text for chunk in all_chunks[i: i + EMBEDDINGS_BATCH_SIZE]
-        ]
-
+        # batch_texts = [
+        #     chunk.text for chunk in all_chunks[i: i + EMBEDDINGS_BATCH_SIZE]
+        # ]
         # Get the embeddings for the batch texts
-        batch_embeddings = get_pigro_embeddings(batch_texts)
+        batch_embeddings = []  # get_pigro_embeddings(batch_texts)
 
         # Append the batch embeddings to the embeddings list
         embeddings.extend(batch_embeddings)
