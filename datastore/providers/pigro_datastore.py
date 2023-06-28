@@ -36,7 +36,18 @@ class PigroDataStore(DataStore):
         )
 
         if r.status_code != 200:
-            raise Exception("Connection Error with Pigro's API server.")
+            raise Exception("Connection Error with Pigro's API server")
+
+        r = requests.post(
+            PIGRO_API_HOST+"set_language",
+            headers=headers,
+            json={
+                "language": str(os.environ.get("PIGRO_LANGUAGE", "en")).lower()
+            }
+        )
+
+        if r.status_code != 200:
+            r.raise_for_status()
 
         super(DataStore, self).__init__(*args, **kwargs)
 
