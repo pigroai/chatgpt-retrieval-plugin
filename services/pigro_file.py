@@ -9,7 +9,7 @@ from fastapi import UploadFile
 
 from models.models import Document, DocumentMetadata
 
-PIGRO_CONVERTER_HOST = os.environ.get("PIGRO_HOST", None) + "/converter"
+PIGRO_CONVERTER_HOST = os.environ.get("PIGRO_HOST", None) + "convert"
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 
 
@@ -23,7 +23,7 @@ async def get_document_from_file(
     return doc
 
 
-def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) -> str:
+def extract_text_from_filepath(filename: str, filepath: str, mimetype: Optional[str] = None) -> str:
     """Return the text content of a file given its filepath."""
 
     if mimetype is None:
@@ -35,11 +35,10 @@ def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) ->
             mimetype = "text/markdown"
         else:
             raise Exception("Unsupported file type")
-
     try:
         # call pigro's converter and set the returned data inside the response itself...
         files = {
-            'file': (open(filepath, 'rb'), mimetype)
+            'file': (filename, open(filepath, 'rb'))
         }
         headers = {
             "x-api-key": PIGRO_KEY
@@ -50,11 +49,13 @@ def extract_text_from_filepath(filepath: str, mimetype: Optional[str] = None) ->
             headers=headers,
             files=files
         )
-
         if r.status_code == 200:
             response = r.json()
             if response['status']:
-                extracted_text = response['html_text']
+                extracted_text = response['data']
+                if len(extracted_text) == 0:
+                    raise Exception(
+                        "The returned converted data is empty, the response is: " + r.text)
             else:
                 raise Exception(response['message'])
     except Exception as e:
@@ -85,7 +86,7 @@ async def extract_text_from_form_file(file: UploadFile):
         f.write(file_stream)
 
     try:
-        extracted_text = extract_text_from_filepath(temp_file_path, mimetype)
+        extracted_text = extract_text_from_filepath(tmp_name+ext, temp_file_path, mimetype)
     except Exception as e:
         print(f"Error: {e}")
         os.remove(temp_file_path)

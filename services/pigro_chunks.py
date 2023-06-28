@@ -10,7 +10,7 @@ from models.models import Document, DocumentChunk, DocumentChunkMetadata
 # from services.pigro_embedder import get_pigro_embeddings
 
 # Global variables
-PIGRO_SPLITTER_HOST = os.environ.get("PIGRO_HOST", None) + "/chunks"
+PIGRO_SPLITTER_HOST = os.environ.get("PIGRO_HOST", None) + "chunks"
 PIGRO_KEY = os.environ.get("PIGRO_KEY", None)
 PIGRO_LANGUAGE = os.environ.get("PIGRO_LANGUAGE", None)
 EMBEDDINGS_BATCH_SIZE = 128
@@ -36,22 +36,25 @@ def get_text_chunks(text: str) -> List[str]:
         'language': PIGRO_LANGUAGE
     }
     headers = {
-        "x-api-key": PIGRO_KEY
+        "x-api-key": PIGRO_KEY,
+        'Content-Type': 'application/json'
     }
     try:
         r = requests.post(
             PIGRO_SPLITTER_HOST,
             headers=headers,
-            data=values
+            json=values
         )
 
         if r.status_code == 200:
             response = r.json()
-            if response['status']:
-                for ch in response['paragraphs']:
+            if response['success']:
+                for ch in response["data"]['paragraphs']:
                     chunks.append(html.unescape(ch['paragraph']))
             else:
-                raise Exception(response['message'])
+                raise Exception(response['error'])
+        else:
+            r.raise_for_status()
 
     except Exception as e:
         print(f"Error: {e}")
@@ -139,21 +142,21 @@ def get_pigro_document_chunks(documents: List[Document]) -> Dict[str, List[Docum
         return {}
 
     # Get all the embeddings for the document chunks in batches, using get_pigro_embeddings
-    embeddings: List[List[float]] = []
-    for i in range(0, len(all_chunks), EMBEDDINGS_BATCH_SIZE):
-        # Get the text of the chunks in the current batch
-        # batch_texts = [
-        #     chunk.text for chunk in all_chunks[i: i + EMBEDDINGS_BATCH_SIZE]
-        # ]
-        # Get the embeddings for the batch texts
-        batch_embeddings = []  # get_pigro_embeddings(batch_texts)
+    # embeddings: List[List[float]] = []
+    # for i in range(0, len(all_chunks), EMBEDDINGS_BATCH_SIZE):
+    #     # Get the text of the chunks in the current batch
+    #     # batch_texts = [
+    #     #     chunk.text for chunk in all_chunks[i: i + EMBEDDINGS_BATCH_SIZE]
+    #     # ]
+    #     # Get the embeddings for the batch texts
+    #     batch_embeddings = []  # get_pigro_embeddings(batch_texts)
 
-        # Append the batch embeddings to the embeddings list
-        embeddings.extend(batch_embeddings)
+    #     # Append the batch embeddings to the embeddings list
+    #     embeddings.extend(batch_embeddings)
 
     # Update the document chunk objects with the embeddings
     for i, chunk in enumerate(all_chunks):
         # Assign the embedding from the embeddings list to the chunk object
-        chunk.embedding = embeddings[i]
+        chunk.embedding = [] #embeddings[i]
 
     return chunks
