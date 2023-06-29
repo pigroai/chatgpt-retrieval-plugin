@@ -25,7 +25,7 @@ async def get_document_from_file(
 
 def extract_text_from_filepath(filename: str, filepath: str, mimetype: Optional[str] = None) -> str:
     """Return the text content of a file given its filepath."""
-
+    extracted_text = ""
     if mimetype is None:
         # Get the mimetype of the file based on its extension
         mimetype, _ = mimetypes.guess_type(filepath)

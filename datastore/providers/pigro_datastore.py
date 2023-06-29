@@ -135,7 +135,7 @@ class PigroDataStore(DataStore):
                     result = DocumentChunkWithScore(
                         id=chunk_info['id'],
                         score=chunk_info['score'],
-                        text=html.unescape(chunk_info['body']),
+                        text=chunk_info['body'],
                         metadata=chunk_info["metadata"]
                     )
                     query_results.append(result)
