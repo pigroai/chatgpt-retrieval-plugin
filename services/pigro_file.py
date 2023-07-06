@@ -51,13 +51,13 @@ def extract_text_from_filepath(filename: str, filepath: str, mimetype: Optional[
         )
         if r.status_code == 200:
             response = r.json()
-            if response['status']:
+            if response['success']:
                 extracted_text = response['data']
                 if len(extracted_text) == 0:
                     raise Exception(
                         "The returned converted data is empty, the response is: " + r.text)
             else:
-                raise Exception(response['message'])
+                raise Exception(response['error'])
     except Exception as e:
         print(f"Error: {e}")
         raise e
