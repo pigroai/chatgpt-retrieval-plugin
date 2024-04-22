@@ -1,3 +1,4 @@
+# It's been moved to [preprocess.co](https://preprocess.co)
 # [DEPRECATED] ChatGPT Retrieval Plugin by [Pigro.ai](https://openai.pigro.ai)
 
 > **WARNING: this is a fork of the original [openai repository](https://github.com/openai/chatgpt-retrieval-plugin)**
